@@ -55,6 +55,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="254712345678"
+              autoComplete="tel"
               className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition"
               disabled={loading}
             />
@@ -69,6 +70,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              autoComplete="current-password"
               className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition"
               disabled={loading}
             />
