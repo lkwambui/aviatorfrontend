@@ -65,9 +65,9 @@ const BetPanel = () => {
   const isBettingEnabled = gameStatus === "open" && !loading && betAmount >= MIN_BET && betAmount <= balance;
 
   return (
-    <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl border border-gray-700 p-4 sm:p-6 space-y-4 sm:space-y-6 shadow-lg h-fit sticky top-20">
+    <div className="bg-linear-to-b from-gray-800 to-gray-900 rounded-xl border border-gray-700 p-4 sm:p-6 space-y-4 sm:space-y-6 shadow-lg h-fit sticky top-20">
       {/* Balance Display */}
-      <div className="bg-gradient-to-r from-orange-600 to-orange-500 rounded-lg p-4 text-center">
+      <div className="bg-linear-to-r from-orange-600 to-orange-500 rounded-lg p-4 text-center">
         <p className="text-orange-100 text-xs sm:text-sm font-medium mb-1">Available Balance</p>
         <p className="text-2xl sm:text-3xl font-bold text-white font-mono">
           KSH {balance.toLocaleString()}

@@ -96,7 +96,7 @@ const AnimatedPlane = ({ multiplier = 1.5, isRunning = false, isCrashed = false 
   );
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+    <div className="relative w-full h-full overflow-hidden bg-linear-to-b from-gray-900 via-gray-800 to-gray-900">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(251,146,60,0.1),transparent_50%)]" />
