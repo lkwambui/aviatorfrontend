@@ -37,26 +37,24 @@ const AnimatedPlane = ({ multiplier = 1.5, isRunning = false, isCrashed = false 
 
   const rotation = Math.atan2(tangentY, tangentX) * (180 / Math.PI);
   const scale = 1 - easeProgress * 0.35;
+  const pixelX = (currentX / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1200) - 50;
+  const pixelY = (currentY / 100) * (typeof window !== 'undefined' ? window.innerHeight : 800) - 50;
 
   useEffect(() => {
     if (!isRunning) {
       // Reset position
       setPlaneStyle({
-        left: "5%",
-        bottom: "8%",
         opacity: 1,
-        transform: "rotate(0deg) scale(1)",
+        transform: "translate3d(0, 0, 0) rotate(0deg) scale(1)",
       });
       return;
     }
 
     setPlaneStyle({
-      left: `${currentX}%`,
-      bottom: `${currentY}%`,
       opacity: 1 - easeProgress * 0.2,
-      transform: `rotate(${rotation}deg) scale(${scale})`,
+      transform: `translate3d(${pixelX}px, ${pixelY}px, 0) rotate(${rotation}deg) scale(${scale})`,
     });
-  }, [isRunning, currentX, currentY, easeProgress, rotation, scale]);
+  }, [isRunning, pixelX, pixelY, easeProgress, rotation, scale]);
 
   // Sleek jet silhouette (UI only)
   const PlaneIcon = () => (
@@ -218,8 +216,14 @@ const AnimatedPlane = ({ multiplier = 1.5, isRunning = false, isCrashed = false 
 
       {/* Animated Plane */}
       <div
-        className="absolute transition-all"
         style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          opacity: planeStyle.opacity,
+          transform: planeStyle.transform,
+          transformStyle: "preserve-3d",
+          willChange: "transform",
           ...planeStyle,
           transitionDuration: "0ms",
         }}

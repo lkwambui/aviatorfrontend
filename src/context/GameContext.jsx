@@ -117,7 +117,7 @@ export const GameProvider = ({ children }) => {
   // Poll round every 300-500ms
   useEffect(() => {
     fetchRound();
-    const interval = setInterval(fetchRound, 400);
+    const interval = setInterval(fetchRound, 500);
     return () => clearInterval(interval);
   }, [fetchRound]);
 

@@ -64,7 +64,7 @@ const DualBetPanel = () => {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col gap-3 sm:gap-4 lg:flex-row">
       {/* Bet Panel 1 */}
       <div className="flex-1 bg-gray-900/80 rounded-lg p-4">
         {error1 && (
@@ -79,17 +79,17 @@ const DualBetPanel = () => {
             <button
               onClick={() => adjustAmount(bet1Amount, -100, setBet1Amount)}
               disabled={gameStatus !== "open" || loading}
-              className="w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-bold text-xl disabled:opacity-50"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-bold text-lg sm:text-xl disabled:opacity-50"
             >
               −
             </button>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">{bet1Amount}</div>
+              <div className="text-xl sm:text-2xl font-bold text-white">{bet1Amount}</div>
             </div>
             <button
               onClick={() => adjustAmount(bet1Amount, 100, setBet1Amount)}
               disabled={gameStatus !== "open" || loading}
-              className="w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-bold text-xl disabled:opacity-50"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-bold text-lg sm:text-xl disabled:opacity-50"
             >
               +
             </button>
@@ -128,7 +128,7 @@ const DualBetPanel = () => {
         <button
           onClick={() => handlePlaceBet(1)}
           disabled={gameStatus !== "open" || loading || !isAuthenticated || bet1Placed}
-          className={`w-full py-4 text-lg font-bold rounded-lg transition-all shadow-lg ${
+          className={`w-full py-3 sm:py-4 text-base sm:text-lg font-bold rounded-lg transition-all shadow-lg ${
             gameStatus === "open" && !loading && isAuthenticated && !bet1Placed
               ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-purple-900/50"
               : "bg-gray-700 text-gray-500 cursor-not-allowed"
@@ -163,17 +163,17 @@ const DualBetPanel = () => {
             <button
               onClick={() => adjustAmount(bet2Amount, -100, setBet2Amount)}
               disabled={gameStatus !== "open" || loading}
-              className="w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-bold text-xl disabled:opacity-50"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-bold text-lg sm:text-xl disabled:opacity-50"
             >
               −
             </button>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">{bet2Amount}</div>
+              <div className="text-xl sm:text-2xl font-bold text-white">{bet2Amount}</div>
             </div>
             <button
               onClick={() => adjustAmount(bet2Amount, 100, setBet2Amount)}
               disabled={gameStatus !== "open" || loading}
-              className="w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-bold text-xl disabled:opacity-50"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-bold text-lg sm:text-xl disabled:opacity-50"
             >
               +
             </button>
@@ -212,7 +212,7 @@ const DualBetPanel = () => {
         <button
           onClick={() => handlePlaceBet(2)}
           disabled={gameStatus !== "open" || loading || !isAuthenticated || bet2Placed}
-          className={`w-full py-4 text-lg font-bold rounded-lg transition-all shadow-lg ${
+          className={`w-full py-3 sm:py-4 text-base sm:text-lg font-bold rounded-lg transition-all shadow-lg ${
             gameStatus === "open" && !loading && isAuthenticated && !bet2Placed
               ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-purple-900/50"
               : "bg-gray-700 text-gray-500 cursor-not-allowed"
