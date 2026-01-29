@@ -20,6 +20,9 @@ export const GameProvider = ({ children }) => {
       const res = await aviatorAPI.getRound();
       setRoundData(res.data);
       setGameStatus(res.data.status);
+      if (typeof res.data.current_multiplier === "number") {
+        setMultiplier(res.data.current_multiplier);
+      }
       setError(null);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch round");
@@ -100,20 +103,6 @@ export const GameProvider = ({ children }) => {
     [fetchBalance, fetchCurrentBets]
   );
 
-  // Simulate multiplier increment
-  useEffect(() => {
-    if (gameStatus !== "running") return;
-
-    const interval = setInterval(() => {
-      setMultiplier((prev) => {
-        const newMultiplier = prev + 0.06;
-        return newMultiplier > 1000 ? 1000 : newMultiplier; // Cap at 1000x
-      });
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [gameStatus]);
-
   // Poll round every 300-500ms
   useEffect(() => {
     fetchRound();
@@ -128,8 +117,14 @@ export const GameProvider = ({ children }) => {
       setGameStatus(roundData?.status || "closed");
     } else if (roundData?.status === "running") {
       setGameStatus("running");
+      if (typeof roundData?.current_multiplier === "number") {
+        setMultiplier(roundData.current_multiplier);
+      }
     } else if (roundData?.status === "crashed") {
       setGameStatus("crashed");
+      if (typeof roundData?.current_multiplier === "number") {
+        setMultiplier(roundData.current_multiplier);
+      }
     }
   }, [roundData?.status, roundData?.id]);
 
