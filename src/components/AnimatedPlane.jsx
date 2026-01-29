@@ -8,6 +8,36 @@ const AnimatedPlane = ({ multiplier = 1.5, isRunning = false, isCrashed = false 
     transform: "rotate(-15deg) scale(1)",
   });
 
+  const clampMultiplier = Math.max(1, multiplier);
+  const progress = isRunning ? Math.min((clampMultiplier - 1.0) / 20, 1) : 0;
+  const easeProgress = progress * progress * 0.5 + progress * 0.5;
+
+  const startX = 5;
+  const startY = 8;
+  const controlX = 35;
+  const controlY = 88;
+  const endX = 90;
+  const endY = 80;
+
+  const currentX =
+    (1 - easeProgress) * (1 - easeProgress) * startX +
+    2 * (1 - easeProgress) * easeProgress * controlX +
+    easeProgress * easeProgress * endX;
+  const currentY =
+    (1 - easeProgress) * (1 - easeProgress) * startY +
+    2 * (1 - easeProgress) * easeProgress * controlY +
+    easeProgress * easeProgress * endY;
+
+  const tangentX =
+    2 * (1 - easeProgress) * (controlX - startX) +
+    2 * easeProgress * (endX - controlX);
+  const tangentY =
+    2 * (1 - easeProgress) * (controlY - startY) +
+    2 * easeProgress * (endY - controlY);
+
+  const rotation = Math.atan2(tangentY, tangentX) * (180 / Math.PI) - 90;
+  const scale = 1 - easeProgress * 0.35;
+
   useEffect(() => {
     if (!isRunning) {
       // Reset position
@@ -20,31 +50,13 @@ const AnimatedPlane = ({ multiplier = 1.5, isRunning = false, isCrashed = false 
       return;
     }
 
-    // Calculate position based on multiplier (backend-controlled)
-    // Multiplier typically ranges from 1.00x to ~100x+
-    // We'll map this to screen position
-    const progress = Math.min((multiplier - 1.0) / 20, 1); // Normalize: 1x-20x maps to 0-1
-
-    // Smooth curve trajectory
-    const easeProgress = progress * progress * 0.5 + progress * 0.5;
-
-    // Calculate position using curve (diagonal upward path)
-    const leftPos = 5 + easeProgress * 85;
-    const bottomPos = 10 + easeProgress * 70; // Diagonal climb
-
-    // Rotation based on trajectory (climbing angle)
-    const rotation = -15 + easeProgress * 50;
-
-    // Scale effect (gets smaller as it goes higher)
-    const scale = 1 - easeProgress * 0.4;
-
     setPlaneStyle({
-      left: `${leftPos}%`,
-      bottom: `${bottomPos}%`,
+      left: `${currentX}%`,
+      bottom: `${currentY}%`,
       opacity: 1 - easeProgress * 0.2,
       transform: `rotate(${rotation}deg) scale(${scale})`,
     });
-  }, [isRunning, multiplier]);
+  }, [isRunning, currentX, currentY, easeProgress, rotation, scale]);
 
   // Realistic Plane SVG (commercial jet)
   const PlaneIcon = () => (
@@ -245,40 +257,49 @@ const AnimatedPlane = ({ multiplier = 1.5, isRunning = false, isCrashed = false 
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-linear-to-b from-gray-900 via-gray-800 to-gray-900">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(251,146,60,0.1),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
+      {/* Background rays */}
+      <div className="absolute inset-0">
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            background:
+              "conic-gradient(from 210deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02), rgba(255,255,255,0.05))",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
       </div>
 
-      {/* Grid lines */}
-      <svg
-        className="absolute inset-0 w-full h-full opacity-10"
-        style={{ pointerEvents: "none" }}
-      >
-        {[...Array(10)].map((_, i) => (
-          <line
-            key={`h-${i}`}
-            x1="0"
-            y1={`${(i + 1) * 10}%`}
-            x2="100%"
-            y2={`${(i + 1) * 10}%`}
-            stroke="#64748b"
-            strokeWidth="0.5"
-          />
-        ))}
-        {[...Array(10)].map((_, i) => (
-          <line
-            key={`v-${i}`}
-            x1={`${(i + 1) * 10}%`}
-            y1="0"
-            x2={`${(i + 1) * 10}%`}
-            y2="100%"
-            stroke="#64748b"
-            strokeWidth="0.5"
-          />
-        ))}
+      {/* Curve path and fill */}
+      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path
+          d={`M ${startX} ${100 - startY} Q ${controlX} ${100 - controlY} ${currentX} ${100 - currentY} L ${currentX} 100 L ${startX} 100 Z`}
+          fill="rgba(96, 165, 250, 0.35)"
+        />
+        <path
+          d={`M ${startX} ${100 - startY} Q ${controlX} ${100 - controlY} ${currentX} ${100 - currentY}`}
+          stroke="rgba(96, 165, 250, 0.9)"
+          strokeWidth="1"
+          fill="none"
+        />
       </svg>
+
+      {/* Axis dots */}
+      <div className="absolute inset-0">
+        {[...Array(8)].map((_, i) => (
+          <span
+            key={`bottom-dot-${i}`}
+            className="absolute bottom-2 w-1.5 h-1.5 rounded-full bg-blue-400"
+            style={{ left: `${8 + i * 12}%` }}
+          />
+        ))}
+        {[...Array(8)].map((_, i) => (
+          <span
+            key={`left-dot-${i}`}
+            className="absolute left-2 w-1.5 h-1.5 rounded-full bg-blue-400"
+            style={{ bottom: `${8 + i * 10}%` }}
+          />
+        ))}
+      </div>
 
       {/* Animated Plane */}
       <div
@@ -292,9 +313,8 @@ const AnimatedPlane = ({ multiplier = 1.5, isRunning = false, isCrashed = false 
       </div>
 
       {/* Multiplier Display */}
-      <div className="absolute top-8 left-8 z-10">
-        <div className="text-white">
-          <div className="text-sm font-semibold text-gray-300 mb-2">Current Multiplier</div>
+      <div className="absolute inset-0 flex items-center justify-center z-10">
+        <div className="text-center">
           <div
             className={`text-6xl font-bold font-mono tracking-wider transition-all duration-150 ${
               isCrashed ? "text-red-500" : "text-blue-400"
