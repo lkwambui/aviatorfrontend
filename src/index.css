@@ -1,1 +1,27 @@
 @import "tailwindcss";
+/* Stars */
+.stars-layer {
+  background:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 70% 80%, white, transparent),
+    radial-gradient(1px 1px at 40% 60%, white, transparent);
+  animation: starsMove 40s linear infinite;
+  opacity: 0.4;
+}
+
+@keyframes starsMove {
+  from { background-position: 0 0; }
+  to { background-position: 1000px 1000px; }
+}
+
+/* Clouds */
+.clouds-layer {
+  background: url("https://www.transparenttextures.com/patterns/cloudy.png");
+  opacity: 0.15;
+  animation: cloudsMove 90s linear infinite;
+}
+
+@keyframes cloudsMove {
+  from { background-position: 0 0; }
+  to { background-position: -2000px 0; }
+}
