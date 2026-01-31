@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
@@ -49,9 +49,10 @@ function Plane({ progress, crashed }) {
 }
 
 /* ---------------- SCENE ---------------- */
-function Scene({ multiplier, crashPoint }) {
-  const progress = Math.min(multiplier / crashPoint, 1);
-  const crashed = multiplier >= crashPoint;
+function Scene({ multiplier, isCrashed }) {
+  const safeMultiplier = Math.max(multiplier || 1, 1);
+  const progress = Math.min(safeMultiplier / 20, 1);
+  const crashed = Boolean(isCrashed);
 
   return (
     <>
@@ -83,43 +84,14 @@ function Scene({ multiplier, crashPoint }) {
 }
 
 /* ---------------- MAIN ---------------- */
-export default function Aviator3D({ crashPoint, isRunning }) {
-  const [multiplier, setMultiplier] = useState(1);
-  const startRef = useRef(null);
-
-  useEffect(() => {
-    if (!isRunning) {
-      setMultiplier(1);
-      startRef.current = null;
-      return;
-    }
-
-    let raf;
-
-    const animate = (t) => {
-      if (!startRef.current) startRef.current = t;
-      const elapsed = t - startRef.current;
-
-      const value = Math.exp(0.0009 * elapsed);
-
-      if (value >= crashPoint) {
-        setMultiplier(crashPoint);
-        return;
-      }
-
-      setMultiplier(value);
-      raf = requestAnimationFrame(animate);
-    };
-
-    raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
-  }, [isRunning, crashPoint]);
+export default function Aviator3D({ multiplier = 1, isRunning, isCrashed }) {
+  const displayMultiplier = Math.max(multiplier || 1, 1);
 
   return (
     <div style={{ height: "60vh", background: "#020617" }}>
       <Canvas>
         <PerspectiveCamera makeDefault position={[0, 2, 10]} />
-        <Scene multiplier={multiplier} crashPoint={crashPoint} />
+        <Scene multiplier={displayMultiplier} isCrashed={isCrashed} />
       </Canvas>
 
       {/* Multiplier UI */}
@@ -132,11 +104,11 @@ export default function Aviator3D({ crashPoint, isRunning }) {
           justifyContent: "center",
           fontSize: "4rem",
           fontWeight: 800,
-          color: multiplier >= crashPoint ? "#dc2626" : "#e5e7eb",
+          color: isCrashed ? "#dc2626" : "#e5e7eb",
           pointerEvents: "none",
         }}
       >
-        {multiplier.toFixed(2)}x
+        {displayMultiplier.toFixed(2)}x
       </div>
     </div>
   );

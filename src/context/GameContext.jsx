@@ -106,10 +106,10 @@ export const GameProvider = ({ children }) => {
 
     const interval = setInterval(() => {
       setMultiplier((prev) => {
-        const newMultiplier = prev + 0.06;
-        return newMultiplier > 1000 ? 1000 : newMultiplier; // Cap at 1000x
+        const newMultiplier = prev + 0.6;
+        return newMultiplier > 20 ? 20 : newMultiplier; // Cap at 20x (backend cap)
       });
-    }, 100);
+    }, 30);
 
     return () => clearInterval(interval);
   }, [gameStatus]);
