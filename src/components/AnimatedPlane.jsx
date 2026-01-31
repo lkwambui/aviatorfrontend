@@ -1,143 +1,103 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import * as THREE from "three";
+import "../index.css";
 
-/* ---------------- PLANE ---------------- */
-function Plane({ progress, crashed }) {
-  const ref = useRef();
+export default function AviatorGame({ crashPoint, isRunning }) {
+  const [multiplier, setMultiplier] = useState(1.0);
+  const [status, setStatus] = useState("waiting"); // waiting | running | crashed
+  const animationRef = useRef(null);
+  const startTimeRef = useRef(null);
 
-  useFrame(() => {
-    if (!ref.current || crashed) return;
-
-    // Curve path (aviator-like)
-    const x = progress * 8;
-    const y = Math.pow(progress, 1.3) * 3;
-    const z = 0;
-
-    ref.current.position.set(x, y, z);
-    ref.current.rotation.z = -0.3 + progress * 0.6;
-  });
-
-  return (
-    <group ref={ref} scale={0.7}>
-      {/* Body */}
-      <mesh>
-        <cylinderGeometry args={[0.15, 0.15, 2.2, 16]} />
-        <meshStandardMaterial color="#dc2626" />
-      </mesh>
-
-      {/* Nose */}
-      <mesh position={[0, 1.2, 0]}>
-        <coneGeometry args={[0.18, 0.4, 16]} />
-        <meshStandardMaterial color="#ef4444" />
-      </mesh>
-
-      {/* Wings */}
-      <mesh rotation={[0, 0, Math.PI / 2]}>
-        <boxGeometry args={[0.08, 1.1, 0.02]} />
-        <meshStandardMaterial color="#b91c1c" />
-      </mesh>
-
-      {/* Tail */}
-      <mesh position={[0, -1, 0]}>
-        <boxGeometry args={[0.12, 0.3, 0.02]} />
-        <meshStandardMaterial color="#991b1b" />
-      </mesh>
-    </group>
-  );
-}
-
-/* ---------------- SCENE ---------------- */
-function Scene({ multiplier, crashPoint }) {
-  const progress = Math.min(multiplier / crashPoint, 1);
-  const crashed = multiplier >= crashPoint;
-
-  return (
-    <>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 8, 5]} intensity={1.2} />
-
-      <Plane progress={progress} crashed={crashed} />
-
-      {/* Curve path (visual guide) */}
-      <mesh rotation={[0, 0, 0]}>
-        <tubeGeometry
-          args={[
-            new THREE.CatmullRomCurve3([
-              new THREE.Vector3(0, 0, 0),
-              new THREE.Vector3(3, 1.5, 0),
-              new THREE.Vector3(6, 4, 0),
-              new THREE.Vector3(8, 6, 0),
-            ]),
-            64,
-            0.02,
-            8,
-            false,
-          ]}
-        />
-        <meshStandardMaterial color="#dc2626" />
-      </mesh>
-    </>
-  );
-}
-
-/* ---------------- MAIN ---------------- */
-export default function Aviator3D({ crashPoint, isRunning }) {
-  const [multiplier, setMultiplier] = useState(1);
-  const startRef = useRef(null);
-
+  // -------- MULTIPLIER ENGINE (FRONTEND SYNC) --------
   useEffect(() => {
     if (!isRunning) {
-      setMultiplier(1);
-      startRef.current = null;
       return;
     }
 
-    let raf;
+    setStatus("running");
+    startTimeRef.current = performance.now();
 
-    const animate = (t) => {
-      if (!startRef.current) startRef.current = t;
-      const elapsed = t - startRef.current;
+    const animate = (time) => {
+      const elapsed = (time - startTimeRef.current) / 1000;
 
-      const value = Math.exp(0.0009 * elapsed);
+      // Smooth exponential growth (aviator-like)
+      const value = Math.exp(elapsed * 0.45);
 
       if (value >= crashPoint) {
         setMultiplier(crashPoint);
+        setStatus("crashed");
+        cancelAnimationFrame(animationRef.current);
         return;
       }
 
-      setMultiplier(value);
-      raf = requestAnimationFrame(animate);
+      setMultiplier(Number(value.toFixed(2)));
+      animationRef.current = requestAnimationFrame(animate);
     };
 
-    raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
   }, [isRunning, crashPoint]);
 
-  return (
-    <div style={{ height: "60vh", background: "#020617" }}>
-      <Canvas>
-        <PerspectiveCamera makeDefault position={[0, 2, 10]} />
-        <Scene multiplier={multiplier} crashPoint={crashPoint} />
-      </Canvas>
+  // Reset on round change
+  useEffect(() => {
+    if (!isRunning) {
+      setMultiplier(1.0);
+      setStatus("waiting");
+    }
+  }, [isRunning]);
 
-      {/* Multiplier UI */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "4rem",
-          fontWeight: 800,
-          color: multiplier >= crashPoint ? "#dc2626" : "#e5e7eb",
-          pointerEvents: "none",
-        }}
-      >
+  // -------- CURVE POSITION --------
+  const progress = Math.min((multiplier - 1) / (crashPoint - 1), 1);
+
+  const x = 10 + progress * 80;
+  const y = 90 - Math.pow(progress, 0.55) * 80;
+
+  return (
+    <div className="aviator-container">
+      {/* BACKGROUND */}
+      <div className={`space-bg ${status === "running" ? "moving" : ""}`} />
+
+      {/* MULTIPLIER */}
+      <div className={`multiplier ${status}`}>
         {multiplier.toFixed(2)}x
       </div>
+
+      {/* GRAPH */}
+      <svg className="graph" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path
+          d={`M10 90 Q 40 20 ${x} ${y}`}
+          stroke="#ef4444"
+          strokeWidth="2"
+          fill="none"
+        />
+        <path
+          d={`M10 90 Q 40 20 ${x} ${y} L ${x} 100 L 10 100 Z`}
+          fill="rgba(239,68,68,0.25)"
+        />
+      </svg>
+
+      {/* PLANE */}
+      <div
+        className={`plane ${status}`}
+        style={{
+          left: `${x}%`,
+          top: `${y}%`,
+          transform: `translate(-50%, -50%) rotate(${progress * 35}deg)`
+        }}
+      >
+        ✈️
+      </div>
+
+      {/* CRASH OVERLAY */}
+      {status === "crashed" && (
+        <div className="crash-overlay">
+          ⚡ CRASHED @ {crashPoint}x
+        </div>
+      )}
     </div>
   );
 }
