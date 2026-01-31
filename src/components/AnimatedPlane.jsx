@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../styles/aviator.css";
 
 export default function AviatorGame() {
   const [multiplier, setMultiplier] = useState(1.0);
