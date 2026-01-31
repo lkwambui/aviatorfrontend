@@ -143,7 +143,7 @@ const BetPanel = () => {
         disabled={!isBettingEnabled || loading}
         className={`w-full py-3 rounded-lg font-bold text-sm sm:text-base transition-all ${
           isBettingEnabled && !loading
-            ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white cursor-pointer hover:shadow-lg hover:shadow-orange-500/50"
+            ? "bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white cursor-pointer hover:shadow-lg hover:shadow-orange-500/50"
             : "bg-gray-700 text-gray-400 cursor-not-allowed opacity-50"
         }`}
       >

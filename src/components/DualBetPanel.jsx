@@ -130,7 +130,7 @@ const DualBetPanel = () => {
           disabled={gameStatus !== "open" || loading || !isAuthenticated || bet1Placed}
           className={`w-full py-3 sm:py-4 text-base sm:text-lg font-bold rounded-lg transition-all shadow-lg ${
             gameStatus === "open" && !loading && isAuthenticated && !bet1Placed
-              ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-purple-900/50"
+              ? "bg-linear-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-purple-900/50"
               : "bg-gray-700 text-gray-500 cursor-not-allowed"
           }`}
         >
@@ -214,7 +214,7 @@ const DualBetPanel = () => {
           disabled={gameStatus !== "open" || loading || !isAuthenticated || bet2Placed}
           className={`w-full py-3 sm:py-4 text-base sm:text-lg font-bold rounded-lg transition-all shadow-lg ${
             gameStatus === "open" && !loading && isAuthenticated && !bet2Placed
-              ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-purple-900/50"
+              ? "bg-linear-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-purple-900/50"
               : "bg-gray-700 text-gray-500 cursor-not-allowed"
           }`}
         >

@@ -20,7 +20,7 @@ const BetHistory = () => {
   const allBets = [...(currentBets || []), ...(bets || [])].slice(0, 15);
 
   return (
-    <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl border border-gray-700 overflow-hidden shadow-lg">
+    <div className="bg-linear-to-b from-gray-800 to-gray-900 rounded-xl border border-gray-700 overflow-hidden shadow-lg">
       <div className="bg-gray-900 px-4 sm:px-6 py-4 border-b border-gray-700">
         <h3 className="text-white font-bold text-lg sm:text-xl">📊 Bet History</h3>
       </div>

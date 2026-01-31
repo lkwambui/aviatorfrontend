@@ -43,7 +43,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-2xl border border-gray-700 p-8 w-full max-w-md shadow-2xl">
+      <div className="bg-linear-to-b from-gray-800 to-gray-900 rounded-2xl border border-gray-700 p-8 w-full max-w-md shadow-2xl">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-white">Register</h2>
           <button
@@ -115,7 +115,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+            className="w-full bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed mt-6"
           >
             {loading ? "Registering..." : "Register"}
           </button>

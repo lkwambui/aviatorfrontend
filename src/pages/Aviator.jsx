@@ -50,7 +50,7 @@ const Aviator = () => {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
                 🚀 SkyRocket
               </h1>
             </div>
@@ -91,7 +91,7 @@ const Aviator = () => {
                   </button>
                   <button
                     onClick={() => setShowRegisterModal(true)}
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-2 px-4 sm:px-6 rounded-lg transition-colors text-sm sm:text-base"
+                    className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-2 px-4 sm:px-6 rounded-lg transition-colors text-sm sm:text-base"
                   >
                     Register
                   </button>
@@ -123,9 +123,9 @@ const Aviator = () => {
         </div>
 
         {/* Center - Game Area */}
-        <div className="flex-1 flex flex-col bg-gradient-to-b from-gray-900 to-black">
+        <div className="flex-1 flex flex-col bg-linear-to-b from-gray-900 to-black">
           {/* Game Canvas */}
-          <div className="flex-1 relative min-h-[280px] sm:min-h-[360px]">
+          <div className="flex-1 relative min-h-70 sm:min-h-90">
             <AnimatedPlane
               crashPoint={currentRound?.crash_point || 2.0}
               isRunning={isRunning}

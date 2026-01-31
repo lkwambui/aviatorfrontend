@@ -38,7 +38,7 @@ const RecentMultipliers = () => {
         multipliers.map((mult, index) => (
           <div
             key={index}
-            className={`flex-shrink-0 text-sm font-bold ${getMultiplierColor(mult)}`}
+            className={`shrink-0 text-sm font-bold ${getMultiplierColor(mult)}`}
           >
             {mult.toFixed(2)}x
           </div>
