@@ -40,7 +40,6 @@ const Aviator = () => {
     logout();
   };
 
-  const isCrashed = gameStatus === "crashed";
   const isRunning = gameStatus === "running";
 
   return (
@@ -128,9 +127,8 @@ const Aviator = () => {
           {/* Game Canvas */}
           <div className="flex-1 relative min-h-[280px] sm:min-h-[360px]">
             <AnimatedPlane
-              multiplier={multiplier}
+              crashPoint={currentRound?.crash_point || 2.0}
               isRunning={isRunning}
-              isCrashed={isCrashed}
             />
           </div>
 
