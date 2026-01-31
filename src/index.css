@@ -25,3 +25,85 @@
   from { background-position: 0 0; }
   to { background-position: -2000px 0; }
 }
+.aviator-container {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  background: radial-gradient(circle at bottom, #0f172a, #020617);
+  overflow: hidden;
+}
+
+/* SPACE BACKGROUND */
+.space-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 1px, transparent 1px);
+  background-size: 3px 3px, 6px 6px;
+  opacity: 0.15;
+}
+
+.space-bg.moving {
+  animation: stars 15s linear infinite;
+}
+
+@keyframes stars {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 1000px, 0 600px; }
+}
+
+/* MULTIPLIER */
+.multiplier {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  font-weight: bold;
+  color: #38bdf8;
+  z-index: 10;
+}
+
+.multiplier.crashed {
+  color: #ef4444;
+}
+
+/* GRAPH */
+.graph {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+/* PLANE */
+.plane {
+  position: absolute;
+  font-size: 3rem;
+  z-index: 5;
+  transition: transform 0.1s linear;
+}
+
+.plane.crashed {
+  animation: shake 0.4s ease-in-out infinite;
+}
+
+@keyframes shake {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  50% { transform: translate(-50%, -50%) rotate(15deg); }
+  100% { transform: translate(-50%, -50%) rotate(-10deg); }
+}
+
+/* CRASH OVERLAY */
+.crash-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #ef4444;
+  z-index: 20;
+}
